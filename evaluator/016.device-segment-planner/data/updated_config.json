@@ -1,0 +1,12 @@
+{
+  "steps": [
+    {"name": "ingest", "device": "gpu"},
+    {"name": "normalize", "device": "gpu"},
+    {"name": "tokenize", "device": "gpu"},
+    {"name": "gpu_feature_extract", "device": "gpu"},
+    {"name": "aggregate", "device": "cpu"},
+    {"name": "gpu_rerank", "device": "gpu"},
+    {"name": "serialize", "device": "cpu"},
+    {"name": "publish", "device": "cpu"}
+  ]
+}

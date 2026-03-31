@@ -1,0 +1,13 @@
+{
+  "legacy_gpu_through_step": 4,
+  "steps": [
+    {"name": "ingest"},
+    {"name": "normalize"},
+    {"name": "tokenize"},
+    {"name": "gpu_feature_extract"},
+    {"name": "aggregate"},
+    {"name": "rank"},
+    {"name": "serialize"},
+    {"name": "publish"}
+  ]
+}

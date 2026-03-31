@@ -1,0 +1,3 @@
+web,login ok,8
+mobile,purchase confirmed,12
+unknown,manual review,3

@@ -1,0 +1,35 @@
+{
+    "camera": {
+        "fy": 500.0,
+        "cx": 320.0,
+        "cy": 240.0
+    },
+    "frame0": {
+        "keypoints": [
+            [
+                100,
+                200
+            ]
+        ]
+    },
+    "frame1": {
+        "keypoints": [
+            [
+                140,
+                200
+            ]
+        ]
+    },
+    "matches": [
+        [
+            0,
+            0
+        ]
+    ],
+    "options": {
+        "model": "E",
+        "ransac_thresh_px": 1.5,
+        "max_iters": 2000,
+        "seed": 12648430
+    }
+}

@@ -1,0 +1,24 @@
+{
+  "rules": [
+    {
+      "id": "ALPHA_10P",
+      "type": "percent",
+      "value": 0.1,
+      "priority": 50,
+      "group": "COUPON",
+      "when": {
+        "coupon": "TIE"
+      }
+    },
+    {
+      "id": "OMEGA_15P",
+      "type": "percent",
+      "value": 0.15,
+      "priority": 50,
+      "group": "COUPON",
+      "when": {
+        "coupon": "TIE"
+      }
+    }
+  ]
+}

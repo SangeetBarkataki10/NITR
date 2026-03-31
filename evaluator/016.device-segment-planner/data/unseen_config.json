@@ -1,0 +1,11 @@
+{
+  "steps": [
+    {"name": "decode", "device": "cpu"},
+    {"name": "clean", "device": "cpu"},
+    {"name": "embed", "device": "gpu"},
+    {"name": "score", "device": "gpu"},
+    {"name": "filter", "device": "cpu"},
+    {"name": "summarize", "device": "cpu"},
+    {"name": "archive", "device": "cpu"}
+  ]
+}

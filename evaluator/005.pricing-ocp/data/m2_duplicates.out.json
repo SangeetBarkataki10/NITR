@@ -1,0 +1,7 @@
+{
+  "final_price": 25.0,
+  "applied_rules": [
+    "ITEMS_20OFF",
+    "COUPON_SAVE5"
+  ]
+}

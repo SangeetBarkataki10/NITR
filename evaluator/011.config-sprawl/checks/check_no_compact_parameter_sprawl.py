@@ -1,0 +1,26 @@
+from pathlib import Path
+import re
+import sys
+
+ROOT = Path(__file__).resolve().parents[3] / "cases" / Path(__file__).resolve().parents[1].name
+FILES = [
+    ROOT / "src" / "report_renderer.h",
+    ROOT / "src" / "report_renderer.cc",
+]
+
+SIGNATURE_RE = re.compile(r"^[^\n;{}]*\([^\n)]*\bcompact_mode\b[^\n)]*\)")
+
+violations = []
+for path in FILES:
+    text = path.read_text()
+    for match in SIGNATURE_RE.finditer(text):
+        line_no = text.count("\n", 0, match.start()) + 1
+        violations.append(f"{path.relative_to(ROOT)}:{line_no}: standalone compact_mode parameter in function signature")
+
+if violations:
+    print("[FAIL] detected compact_mode parameter sprawl:")
+    for violation in violations:
+        print(violation)
+    sys.exit(1)
+
+print("[PASS] no compact_mode parameter sprawl detected")

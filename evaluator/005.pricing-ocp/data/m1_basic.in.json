@@ -1,0 +1,8 @@
+{
+  "subtotal": 100.0,
+  "is_member": true,
+  "items": 12,
+  "coupons": [
+    "SAVE10P"
+  ]
+}

@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+
+import pathlib
+import re
+import sys
+
+
+ROOT = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else pathlib.Path.cwd()
+SRC = ROOT / "src" / "geometry.cc"
+
+
+def strip_comments_and_strings(text: str) -> str:
+    text = re.sub(r'"([^"\\]|\\.)*"', '""', text)
+    text = re.sub(r"'([^'\\]|\\.)*'", "''", text)
+    text = re.sub(r"//.*", "", text)
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    return text
+
+
+def extract_function_body(text: str, function_name: str) -> str:
+    match = re.search(rf"\b{re.escape(function_name)}\s*\([^)]*\)\s*\{{", text)
+    if not match:
+        return ""
+
+    start = match.end()
+    depth = 1
+    i = start
+    while i < len(text):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start:i]
+        i += 1
+    return ""
+
+
+def count_hits(patterns, text: str) -> int:
+    hits = 0
+    for pattern in patterns:
+        if re.search(pattern, text):
+            hits += 1
+    return hits
+
+
+code = strip_comments_and_strings(SRC.read_text(encoding="utf-8"))
+fundamental_body = extract_function_body(code, "EstimateFundamental8Point")
+essential_body = extract_function_body(code, "EstimateEssential8Point")
+
+if not fundamental_body:
+    print("Missing EstimateFundamental8Point body")
+    sys.exit(1)
+
+if not essential_body:
+    print("Missing EstimateEssential8Point body")
+    sys.exit(1)
+
+normalization_patterns = [
+    r"\bmean_[xy]\b",
+    r"\bcentroid\b",
+    r"sqrt\s*\(\s*2(?:\.0)?\s*\)",
+    r"\bscale\b",
+    r"\bT1\b",
+    r"\bT2\b",
+    r"transpose\s*\(\s*\)\s*\*.*\*",
+]
+
+normalization_hits = count_hits(normalization_patterns, code)
+if normalization_hits < 3:
+    print("Expected Hartley-style normalization evidence in src/geometry.cc")
+    sys.exit(1)
+
+essential_constraint_patterns = [
+    r"s\s*\(\s*0\s*\)\s*=\s*s\s*\(\s*1\s*\)",
+    r"s\s*\(\s*1\s*\)\s*=\s*s\s*\(\s*0\s*\)",
+    r"Vector3d\s*\(\s*1(?:\.0)?\s*,\s*1(?:\.0)?\s*,\s*0(?:\.0)?\s*\)",
+    r"Diagonal\s*\(\s*1(?:\.0)?\s*,\s*1(?:\.0)?\s*,\s*0(?:\.0)?\s*\)",
+]
+
+essential_hits = count_hits(essential_constraint_patterns, code)
+if essential_hits == 0:
+    print("Expected essential-matrix singular value constraint handling in src/geometry.cc")
+    sys.exit(1)
+
+if "return Solve8Point" in essential_body and essential_hits == 0:
+    print("Essential path appears to reuse the fundamental solve without essential-specific post-processing")
+    sys.exit(1)
+
+print("geometry structure checks passed")

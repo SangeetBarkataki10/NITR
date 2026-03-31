@@ -1,0 +1,8 @@
+{
+  "final_price": 76.0,
+  "applied_rules": [
+    "ITEMS_20OFF",
+    "MEMBER_10P",
+    "COUPON_SAVE10P"
+  ]
+}

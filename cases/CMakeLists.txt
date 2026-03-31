@@ -1,0 +1,44 @@
+cmake_minimum_required(VERSION 3.16)
+
+option(NITR_BUILD_ALL_CASES "Build all NITR cases" ON)
+set(NITR_CASE "" CACHE STRING
+    "Build only one case (dir name under cases/), e.g. 005.pricing-ocp")
+
+add_library(nlohmann_json INTERFACE)
+target_include_directories(nlohmann_json INTERFACE
+  ${CMAKE_SOURCE_DIR}/third_party/json/single_include
+)
+
+function(nitr_add_case case_dir)
+  add_subdirectory(${case_dir})
+endfunction()
+
+if(NITR_BUILD_ALL_CASES)
+  nitr_add_case(001.add-no-callsite-spread)
+  nitr_add_case(002.refactor-and-resue)
+  nitr_add_case(003.reuse-existing-code)
+  nitr_add_case(004.cv-srp)
+  nitr_add_case(005.pricing-ocp)
+  nitr_add_case(006.gs-isp)
+  nitr_add_case(007.ml-lsp-multistep)
+  nitr_add_case(008.map-dip)
+  nitr_add_case(009.session-expiry-testability)
+  nitr_add_case(010.logging-side-effects)
+  nitr_add_case(011.config-sprawl)
+  nitr_add_case(012.cache-lifecycle)
+  nitr_add_case(013.stable-public-api)
+  nitr_add_case(014.report-export-ocp)
+  nitr_add_case(015.pipeline-provider-decoupling)
+  nitr_add_case(016.device-segment-planner)
+  nitr_add_case(017.active-snapshot-lifecycle)
+  nitr_add_case(018.seeded-selection-testability)
+  nitr_add_case(019.ranking-explainability-boundary)
+  nitr_add_case(020.handover-packet-ownership-boundary)
+  nitr_add_case(021.inline-filter-entrypoint-reuse)
+else()
+  if(NITR_CASE STREQUAL "")
+    message(FATAL_ERROR
+            "Set -DNITR_CASE=<case_dir> or enable -DNITR_BUILD_ALL_CASES=ON")
+  endif()
+  nitr_add_case(${NITR_CASE})
+endif()

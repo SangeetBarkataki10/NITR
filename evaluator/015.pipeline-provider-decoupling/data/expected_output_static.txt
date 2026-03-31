@@ -1,0 +1,3 @@
+source=web;payload=LOGIN_OK;score=8;policy_tier=silver;retention_days=45
+source=mobile;payload=PURCHASE_CONFIRMED;score=12;policy_tier=gold;retention_days=90
+source=unknown;payload=MANUAL_REVIEW;score=3;policy_tier=standard;retention_days=30

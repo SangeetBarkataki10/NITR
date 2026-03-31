@@ -1,0 +1,3 @@
+source=web;payload=LOGIN_OK;score=8
+source=mobile;payload=PURCHASE_CONFIRMED;score=12
+source=unknown;payload=MANUAL_REVIEW;score=3
